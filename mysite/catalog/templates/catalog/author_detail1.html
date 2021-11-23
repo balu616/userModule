@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Author Details</title>{% endblock %}
+{% block content %}
+  <h1>Author Details</h1>
+ {% comment %}  <p>Welcome to LocalLibrary, a website developed by <em>Mozilla Developer Network</em>!</p>
+  <h2>Dynamic content</h2> 
+  <p>The library has the following record counts:</p>{% endcomment %}
+
+  <ul>
+    <li><strong>First Name :</strong> {{ first_name }}</li>
+    <li><strong>Last Name :</strong> {{ last_name }}</li>
+     <li><strong>DOB :</strong> {{ DOB }}</li>
+    <li><strong>DOD :</strong> {{ DOD }}</li> 
+  </ul>
+
+  <h1> Books by the author </h1>
+
+{% for book in booklist %}
+      <li>
+        <a href="{{ book.get_absolute_url }}">{{ book.title }}</a> 
+      </li>
+    {% endfor %}
+  
+{% endblock %}

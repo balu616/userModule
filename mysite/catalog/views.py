@@ -1,6 +1,8 @@
+from django.db.models.fields import NullBooleanField
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 from .models import Book, Author, BookInstance, Genre
@@ -41,7 +43,6 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
-
 class BookListView(generic.ListView):
     model = Book
     paginate_by = 4
@@ -62,7 +63,50 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
-#if the recoed doesnot exist then the following code handles that and gives error
+def AuthorDetailView1(request,pk):
+    """View function for home page of site."""
+
+    # Generate counts of some of the main objects
+    author = get_object_or_404(Author, pk=pk)
+    # try:
+    #     author=Author.objects.get(pk=pk)
+    #     first_name = author.first_name
+    #     last_name = author.last_name
+    #     DOB=author.date_of_birth
+    #     DOD=author.date_of_death
+    # except Author.DoesNotExist:
+    #     author=None
+
+    first_name = author.first_name
+    last_name = author.last_name
+    DOB=author.date_of_birth
+    DOD=author.date_of_death
+    
+    booklist=Book.objects.filter(author=author)
+    
+    context = {
+        'first_name': first_name,
+        'last_name': last_name, 
+        'DOB':DOB,  
+        'DOD':DOD, 
+        'booklist':booklist
+
+    }
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'catalog/author_detail1.html', context=context)
+
+class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
+    """Generic class-based view listing books on loan to current user."""
+    model = BookInstance
+    template_name ='catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+
+
+#if the record doesnot exist then the following code handles that and gives error
 def book_detail_view(request, pk):
     try:
         book = Book.objects.get(pk=pk)
