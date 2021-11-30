@@ -13,8 +13,9 @@
      <li><strong>DOB :</strong> {{ DOB }}</li>
     <li><strong>DOD :</strong> {{ DOD }}</li> 
   </ul>
+<p> <a href="{% url 'author-update' id %}"> Update Author</a>  ||  <a href="{% url 'author-delete' id %}"> Delete Author</a> </p>
 
-  <h1> Books by the author </h1>
+<h1> Books by the author </h1>
 
 {% for book in booklist %}
       <li>
