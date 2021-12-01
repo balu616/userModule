@@ -16,7 +16,7 @@ class AuthorModelTest(TestCase):
     def test_date_of_death_label(self):
         author = Author.objects.get(id=1)
         field_label = author._meta.get_field('date_of_death').verbose_name
-        self.assertEqual(field_label, 'died')
+        self.assertEqual(field_label, 'Died')
 
     def test_first_name_max_length(self):
         author = Author.objects.get(id=1)
@@ -25,7 +25,7 @@ class AuthorModelTest(TestCase):
 
     def test_object_name_is_last_name_comma_first_name(self):
         author = Author.objects.get(id=1)
-        expected_object_name = f'{author.last_name}, {author.first_name}'
+        expected_object_name = f'{author.last_name} {author.first_name}'
         self.assertEqual(str(author), expected_object_name)
 
     def test_get_absolute_url(self):
